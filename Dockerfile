@@ -13,6 +13,8 @@ WORKDIR /var/www/html
 
 COPY . .
 
+#aaa
+
 RUN composer install --no-dev --optimize-autoloader
 
 RUN cp .env.example .env \
