@@ -26,7 +26,6 @@ Route::get('/ldap-test', function () {
     
     $results = $connection->query()
         ->setBaseDn('dc=gerenciadoracessos,dc=local')
-        ->listing()
         ->get();
     
     dd($results);
