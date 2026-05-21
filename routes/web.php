@@ -21,6 +21,11 @@ require __DIR__.'/auth.php';
 
 //testes
 Route::get('/ldap-test', function () {
-    $user = \App\Ldap\User::where('mail', 'testedasilva@gmail.com')->first();
-    dd($user?->getAttributes());
+    try {
+        $connection = app('ldap');
+        $connection->connect();
+        return 'Conectado no LDAP';
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
 });
