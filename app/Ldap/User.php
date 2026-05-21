@@ -3,17 +3,12 @@
 namespace App\Ldap;
 
 use LdapRecord\Models\OpenLDAP\User as BaseUser;
-use Illuminate\Contracts\Auth\Authenticatable;
-use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
 
-class User extends BaseUser implements Authenticatable
+class User extends BaseUser
 {
-    use AuthenticatesWithLdap;
+    protected string $guidKey = 'uuid';
 
-    /**
-     * The object classes of the LDAP model.
-     */
-    public static array $objectClasses = [
+    protected array $objectClasses = [
         'top',
         'person',
         'organizationalPerson',

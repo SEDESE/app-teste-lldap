@@ -21,6 +21,6 @@ require __DIR__.'/auth.php';
 
 //testes
 Route::get('/ldap-test', function () {
-    $user = \App\Ldap\User::where('email', 'testedasilva@gmail.com')->first();
-    dd($user);
+    $user = \App\Ldap\User::where('mail', 'testedasilva@gmail.com')->first();
+    return $user?->getAttributes();
 });
