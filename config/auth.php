@@ -38,9 +38,9 @@ return [
     */
 
     'guards' => [
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'ldap',
+    'web' => [
+        'driver' => 'session',
+        'provider' => 'users',
         ],
     ],
     /*
@@ -61,7 +61,7 @@ return [
     */
 
     'providers' => [
-    'ldap' => [
+    'users' => [
         'driver' => 'ldap',
         'model' => App\Ldap\User::class,
         ],

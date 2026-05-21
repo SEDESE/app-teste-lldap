@@ -2,24 +2,21 @@
 
 namespace App\Ldap;
 
-use LdapRecord\Models\Model;
-use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
-use LdapRecord\Laravel\Auth\LdapAuthenticatable;
+use LdapRecord\Models\OpenLDAP\User as BaseUser;
 use Illuminate\Contracts\Auth\Authenticatable;
+use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
 
-class User extends Model implements LdapAuthenticatable, Authenticatable
+class User extends BaseUser implements Authenticatable
 {
     use AuthenticatesWithLdap;
 
+    /**
+     * The object classes of the LDAP model.
+     */
     public static array $objectClasses = [
+        'top',
+        'person',
+        'organizationalPerson',
         'inetOrgPerson',
     ];
-
-    public function getAuthIdentifierName(): string { return 'uid'; }
-    public function getAuthIdentifier(): mixed { return $this->getFirstAttribute('uid'); }
-    public function getAuthPasswordName(): string { return 'password'; }
-    public function getAuthPassword(): string { return ''; }
-    public function getRememberToken(): ?string { return null; }
-    public function setRememberToken($value): void {}
-    public function getRememberTokenName(): string { return ''; }
 }
