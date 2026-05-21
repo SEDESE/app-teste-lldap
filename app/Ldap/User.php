@@ -2,13 +2,9 @@
 
 namespace App\Ldap;
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use LdapRecord\Models\Model;
 
-class User extends Model implements AuthenticatableContract
+class User extends Model
 {
-    use Authenticatable;
-
     protected ?string $connection = 'default';
 }

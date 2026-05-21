@@ -47,10 +47,12 @@ class LoginRequest extends FormRequest
         config('ldap.connections.default')
     );
 
-    if (! $connection->auth()->attempt(
+    $authenticated = $connection->auth()->attempt(
         $ldapUser->getDn(),
         $this->input('password')
-    )) {
+    );
+
+    if (! $authenticated) {
 
         RateLimiter::hit($this->throttleKey());
 
@@ -59,7 +61,17 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    Auth::login($ldapUser, $this->boolean('remember'));
+    $user = \App\Models\User::firstOrCreate(
+        [
+            'email' => $ldapUser->getFirstAttribute('mail'),
+        ],
+        [
+            'name' => $ldapUser->getFirstAttribute('cn'),
+            'password' => bcrypt(str()->random(32)),
+        ]
+    );
+
+    Auth::login($user, $this->boolean('remember'));
 
     RateLimiter::clear($this->throttleKey());
 }
