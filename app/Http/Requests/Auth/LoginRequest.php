@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Log;
 
 class LoginRequest extends FormRequest
 {
@@ -33,15 +32,7 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        $credentials = ['uid' => $this->input('email'), 'password' => $this->input('password')];
-        
-        \Log::info('Tentando autenticar', ['uid' => $this->input('email')]);
-        
-        $result = Auth::attempt($credentials, $this->boolean('remember'));
-        
-        \Log::info('Resultado da autenticação', ['result' => $result]);
-
-        if (! $result) {
+        if (! Auth::attempt(['uid' => $this->input('email'), 'password' => $this->input('password')], $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([

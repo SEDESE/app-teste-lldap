@@ -63,7 +63,7 @@ return [
     'providers' => [
     'ldap' => [
         'driver' => 'ldap',
-        'model' => App\Ldap\User::class,
+        'model' => LdapRecord\Models\OpenLDAP\User::class,
         ],
     ],
 
