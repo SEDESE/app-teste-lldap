@@ -61,9 +61,9 @@ return [
     */
 
     'providers' => [
-        'ldap' => [
-            'driver' => 'ldap',
-            'model' => LdapRecord\Models\OpenLDAP\User::class,
+    'ldap' => [
+        'driver' => 'ldap',
+        'model' => App\Ldap\User::class,
         ],
     ],
 
