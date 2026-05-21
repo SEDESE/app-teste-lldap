@@ -21,11 +21,6 @@ require __DIR__.'/auth.php';
 
 //testes
 Route::get('/ldap-test', function () {
-    try {
-        $connection = app('ldap');
-        $connection->connect();
-        return 'Conectado no LDAP';
-    } catch (\Exception $e) {
-        return $e->getMessage();
-    }
+    $users = \App\Ldap\User::get();
+    dd($users->toArray());
 });
