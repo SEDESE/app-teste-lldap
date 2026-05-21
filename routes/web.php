@@ -21,6 +21,13 @@ require __DIR__.'/auth.php';
 
 //testes
 Route::get('/ldap-test', function () {
-    $users = \LdapRecord\Models\OpenLDAP\User::in('ou=people,dc=gerenciadoracessos,dc=local')->get();
-    dd($users);
+    $connection = \LdapRecord\Container::getDefaultConnection();
+    $connection->connect();
+    
+    $results = $connection->query()
+        ->setBaseDn('dc=gerenciadoracessos,dc=local')
+        ->listing()
+        ->get();
+    
+    dd($results);
 });
