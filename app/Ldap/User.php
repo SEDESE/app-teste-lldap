@@ -2,16 +2,9 @@
 
 namespace App\Ldap;
 
-use LdapRecord\Models\OpenLDAP\User as BaseUser;
+use LdapRecord\Models\Model;
 
-class User extends BaseUser
+class User extends Model
 {
-    protected string $guidKey = 'uuid';
-
-    public static array $objectClasses = [
-        'top',
-        'person',
-        'organizationalPerson',
-        'inetOrgPerson',
-    ];
+    protected ?string $connection = 'default';
 }
