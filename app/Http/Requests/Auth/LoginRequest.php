@@ -43,10 +43,14 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    if (! Auth::attempt([
-        'uid' => $ldapUser->getFirstAttribute('uid'),
-        'password' => $this->input('password'),
-    ], $this->boolean('remember'))) {
+    $connection = new \LdapRecord\Connection(
+        config('ldap.connections.default')
+    );
+
+    if (! $connection->auth()->attempt(
+        $ldapUser->getDn(),
+        $this->input('password')
+    )) {
 
         RateLimiter::hit($this->throttleKey());
 
@@ -55,9 +59,10 @@ class LoginRequest extends FormRequest
         ]);
     }
 
+    Auth::login($ldapUser, $this->boolean('remember'));
+
     RateLimiter::clear($this->throttleKey());
 }
-
     public function ensureIsNotRateLimited(): void
     {
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
