@@ -9,7 +9,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -21,6 +21,6 @@ require __DIR__.'/auth.php';
 
 //testes
 Route::get('/ldap-test', function () {
-    $user = \App\Ldap\User::where('id', '1')->first();
+    $user = \App\Ldap\User::where('uid', 'teste da silva')->first();
     dd($user);
 });
