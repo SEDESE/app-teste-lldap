@@ -29,19 +29,34 @@ class LoginRequest extends FormRequest
     }
 
     public function authenticate(): void
-    {
-        $this->ensureIsNotRateLimited();
+{
+    $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt(['mail' => $this->input('email'), 'password' => $this->input('password')], $this->boolean('remember')))  {
-            RateLimiter::hit($this->throttleKey());
+    $ldapUser = \App\Ldap\User::where('mail', $this->input('email'))->first();
 
-            throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
-            ]);
-        }
+    if (!$ldapUser) {
 
-        RateLimiter::clear($this->throttleKey());
+        RateLimiter::hit($this->throttleKey());
+
+        throw ValidationException::withMessages([
+            'email' => trans('auth.failed'),
+        ]);
     }
+
+    if (! Auth::attempt([
+        'uid' => $ldapUser->getFirstAttribute('uid'),
+        'password' => $this->input('password'),
+    ], $this->boolean('remember'))) {
+
+        RateLimiter::hit($this->throttleKey());
+
+        throw ValidationException::withMessages([
+            'email' => trans('auth.failed'),
+        ]);
+    }
+
+    RateLimiter::clear($this->throttleKey());
+}
 
     public function ensureIsNotRateLimited(): void
     {
